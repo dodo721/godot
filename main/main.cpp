@@ -947,6 +947,8 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 
 	engine = memnew(Engine);
 
+	print_line("THIS IS A TEST LOG! YOUR CODE IS COMPILING!");
+
 	MAIN_PRINT("Main: Initialize CORE");
 
 	register_core_types();
