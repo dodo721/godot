@@ -89,6 +89,7 @@ void EditorContextMenuPlugin::_bind_methods() {
 	BIND_ENUM_CONSTANT(CONTEXT_SLOT_FILESYSTEM);
 	BIND_ENUM_CONSTANT(CONTEXT_SLOT_FILESYSTEM_CREATE);
 	BIND_ENUM_CONSTANT(CONTEXT_SLOT_SCRIPT_EDITOR);
+	BIND_ENUM_CONSTANT(CONTEXT_SLOT_PROPERTY_INSPECTOR);
 }
 
 void EditorContextMenuPluginManager::add_plugin(EditorContextMenuPlugin::ContextMenuSlot p_slot, const Ref<EditorContextMenuPlugin> &p_plugin) {

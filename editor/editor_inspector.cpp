@@ -830,6 +830,13 @@ void EditorProperty::shortcut_input(const Ref<InputEvent> &p_event) {
 		} else if (!internal && ED_IS_SHORTCUT("property_editor/copy_property_path", p_event)) {
 			menu_option(MENU_COPY_PROPERTY_PATH);
 			accept_event();
+		} else {
+			Callable custom_callback = EditorContextMenuPluginManager::get_singleton()->match_custom_shortcut(EditorContextMenuPlugin::CONTEXT_SLOT_PROPERTY_INSPECTOR, p_event);
+			if (custom_callback.is_valid()) {
+				Vector<String> paths;
+				paths.push_back(property_path);
+				EditorContextMenuPluginManager::get_singleton()->invoke_callback(custom_callback, paths);
+			}
 		}
 	}
 }
@@ -1174,6 +1181,10 @@ void EditorProperty::_update_popup() {
 		menu->add_separator();
 		menu->add_icon_item(get_editor_theme_icon(SNAME("Help")), TTR("Open Documentation"), MENU_OPEN_DOCUMENTATION);
 	}
+
+	Vector<String> paths;
+	paths.push_back(property_path);
+	EditorContextMenuPluginManager::get_singleton()->add_options_from_plugins(menu, EditorContextMenuPlugin::CONTEXT_SLOT_PROPERTY_INSPECTOR, paths);
 }
 
 ////////////////////////////////////////////////
