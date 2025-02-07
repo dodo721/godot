@@ -244,6 +244,8 @@ private:
 
 	HashSet<String> cached_valid_conversion_targets;
 
+	void _select_item(int p_idx, bool p_single = true);
+
 	void _tree_mouse_exited();
 	void _reselect_items_selected_on_drag_begin(bool reset = false);
 

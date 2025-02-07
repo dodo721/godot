@@ -672,6 +672,11 @@ void FileSystemDock::_tree_multi_selected(Object *p_item, int p_column, bool p_s
 	}
 }
 
+void FileSystemDock::_select_item(int p_idx, bool p_single) {
+
+}
+
+
 Vector<String> FileSystemDock::get_selected_paths() const {
 	if (display_mode == DISPLAY_MODE_TREE_ONLY) {
 		return _tree_get_selected(false);
@@ -3946,6 +3951,8 @@ void FileSystemDock::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("add_resource_tooltip_plugin", "plugin"), &FileSystemDock::add_resource_tooltip_plugin);
 	ClassDB::bind_method(D_METHOD("remove_resource_tooltip_plugin", "plugin"), &FileSystemDock::remove_resource_tooltip_plugin);
+
+	ClassDB::bind_method(D_METHOD("get_selected_paths"), &FileSystemDock::get_selected_paths);
 
 	ClassDB::bind_method(D_METHOD("_set_dock_horizontal", "enable"), &FileSystemDock::_set_dock_horizontal);
 	ClassDB::bind_method(D_METHOD("_can_dock_horizontal"), &FileSystemDock::_can_dock_horizontal);
