@@ -536,11 +536,11 @@ bool SceneTree::physics_process(double p_time) {
 	MessageQueue::get_singleton()->flush(); //small little hack
 
 	process_timers(p_time, true); //go through timers
-
 	process_tweens(p_time, true);
 
 	flush_transform_notifications();
 
+	// This should happen last because any processing that deletes something beforehand might expect the object to be removed in the same frame.
 	_flush_delete_queue();
 	_call_idle_callbacks();
 
@@ -581,17 +581,17 @@ bool SceneTree::process(double p_time) {
 	MessageQueue::get_singleton()->flush(); //small little hack
 	flush_transform_notifications(); //transforms after world update, to avoid unnecessary enter/exit notifications
 
-	_flush_delete_queue();
-
 	if (unlikely(pending_new_scene)) {
 		_flush_scene_change();
 	}
 
 	process_timers(p_time, false); //go through timers
-
 	process_tweens(p_time, false);
 
-	flush_transform_notifications(); //additional transforms after timers update
+	flush_transform_notifications(); // Additional transforms after timers update.
+
+	// This should happen last because any processing that deletes something beforehand might expect the object to be removed in the same frame.
+	_flush_delete_queue();
 
 	_call_idle_callbacks();
 
@@ -1892,7 +1892,7 @@ SceneTree::SceneTree() {
 	const bool transparent_background = GLOBAL_DEF("rendering/viewport/transparent_background", false);
 	root->set_transparent_background(transparent_background);
 
-	const bool use_hdr_2d = GLOBAL_DEF_RST_BASIC("rendering/viewport/hdr_2d", false);
+	const bool use_hdr_2d = GLOBAL_DEF_BASIC("rendering/viewport/hdr_2d", false);
 	root->set_use_hdr_2d(use_hdr_2d);
 
 	const int ssaa_mode = GLOBAL_DEF_BASIC(PropertyInfo(Variant::INT, "rendering/anti_aliasing/quality/screen_space_aa", PROPERTY_HINT_ENUM, "Disabled (Fastest),FXAA (Fast)"), 0);

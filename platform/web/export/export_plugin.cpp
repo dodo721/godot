@@ -41,10 +41,8 @@
 #include "editor/themes/editor_scale.h"
 #include "scene/resources/image_texture.h"
 
-#include "modules/modules_enabled.gen.h" // For mono and svg.
-#ifdef MODULE_SVG_ENABLED
+#include "modules/modules_enabled.gen.h" // For mono.
 #include "modules/svg/image_loader_svg.h"
-#endif
 
 Error EditorExportPlatformWeb::_extract_template(const String &p_template, const String &p_dir, const String &p_name, bool pwa) {
 	Ref<FileAccess> io_fa;
@@ -194,9 +192,9 @@ Error EditorExportPlatformWeb::_add_manifest_icon(const String &p_path, const St
 
 	Ref<Image> icon;
 	if (!p_icon.is_empty()) {
-		icon.instantiate();
-		const Error err = ImageLoader::load_image(p_icon, icon);
-		if (err != OK) {
+		Error err = OK;
+		icon = _load_icon_or_splash_image(p_icon, &err);
+		if (err != OK || icon.is_null() || icon->is_empty()) {
 			add_message(EXPORT_MESSAGE_ERROR, TTR("Icon Creation"), vformat(TTR("Could not read file: \"%s\"."), p_icon));
 			return err;
 		}
@@ -340,9 +338,11 @@ Error EditorExportPlatformWeb::_build_pwa(const Ref<EditorExportPreset> &p_prese
 void EditorExportPlatformWeb::get_preset_features(const Ref<EditorExportPreset> &p_preset, List<String> *r_features) const {
 	if (p_preset->get("vram_texture_compression/for_desktop")) {
 		r_features->push_back("s3tc");
+		r_features->push_back("bptc");
 	}
 	if (p_preset->get("vram_texture_compression/for_mobile")) {
 		r_features->push_back("etc2");
+		r_features->push_back("astc");
 	}
 	if (p_preset->get("variant/thread_support").operator bool()) {
 		r_features->push_back("threads");
@@ -904,7 +904,6 @@ EditorExportPlatformWeb::EditorExportPlatformWeb() {
 	if (EditorNode::get_singleton()) {
 		server.instantiate();
 
-#ifdef MODULE_SVG_ENABLED
 		Ref<Image> img = memnew(Image);
 		const bool upsample = !Math::is_equal_approx(Math::round(EDSCALE), EDSCALE);
 
@@ -913,7 +912,6 @@ EditorExportPlatformWeb::EditorExportPlatformWeb() {
 
 		ImageLoaderSVG::create_image_from_string(img, _web_run_icon_svg, EDSCALE, upsample, false);
 		run_icon = ImageTexture::create_from_image(img);
-#endif
 
 		Ref<Theme> theme = EditorNode::get_singleton()->get_editor_theme();
 		if (theme.is_valid()) {
