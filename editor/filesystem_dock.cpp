@@ -671,11 +671,6 @@ void FileSystemDock::_tree_multi_selected(Object *p_item, int p_column, bool p_s
 	}
 }
 
-void FileSystemDock::_select_item(int p_idx, bool p_single) {
-
-}
-
-
 Vector<String> FileSystemDock::get_selected_paths() const {
 	if (display_mode == DISPLAY_MODE_TREE_ONLY) {
 		return _tree_get_selected(false);

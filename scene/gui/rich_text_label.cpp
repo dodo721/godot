@@ -3291,13 +3291,6 @@ void RichTextLabel::_add_item(Item *p_item, bool p_enter, bool p_ensure_newline)
 		update_minimum_size();
 	}
 
-	// DEBUG for getting a breakpoint - why italics/bold no work??
-	if (p_item->type == ITEM_FONT) {
-		ItemFont* fi = static_cast<ItemFont *>(p_item);
-		ERR_FAIL_NULL(fi);
-	}
-	// DEBUG
-
 	queue_redraw();
 }
 
