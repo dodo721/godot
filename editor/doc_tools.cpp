@@ -44,6 +44,7 @@
 #include "scene/theme/theme_db.h"
 
 // Used for a hack preserving Mono properties on non-Mono builds.
+#include "core/variant/variant_utility.h"
 #include "modules/modules_enabled.gen.h" // For mono.
 
 static String _get_indent(const String &p_text) {
@@ -521,6 +522,10 @@ void DocTools::generate(BitField<GenerateFlags> p_flags) {
 
 				bool default_value_valid = false;
 				Variant default_value;
+
+				if (name == "MD2BBHeaderFormat") {
+					print_line("Loading header format!");
+				}
 
 				if (name == "ProjectSettings") {
 					// Special case for project settings, so that settings are not taken from the current project's settings

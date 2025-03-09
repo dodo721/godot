@@ -484,6 +484,7 @@ Error OS_Windows::open_dynamic_library(const String &p_path, void *&p_library_ha
 		Error copy_err = DirAccess::copy_absolute(path, load_path);
 		if (copy_err) {
 			ERR_PRINT("Error copying library: " + path);
+
 			return ERR_CANT_CREATE;
 		}
 

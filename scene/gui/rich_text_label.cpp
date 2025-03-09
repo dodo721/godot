@@ -3290,6 +3290,14 @@ void RichTextLabel::_add_item(Item *p_item, bool p_enter, bool p_ensure_newline)
 	if (fit_content) {
 		update_minimum_size();
 	}
+
+	// DEBUG for getting a breakpoint - why italics/bold no work??
+	if (p_item->type == ITEM_FONT) {
+		ItemFont* fi = static_cast<ItemFont *>(p_item);
+		ERR_FAIL_NULL(fi);
+	}
+	// DEBUG
+
 	queue_redraw();
 }
 
@@ -6938,7 +6946,7 @@ Dictionary RichTextLabel::parse_expressions_for_values(Vector<String> p_expressi
 
 		for (int j = 0; j < values.size(); j++) {
 			if (color.search(values[j]).is_valid()) {
-				a.append(Color::html(values[j]));
+			a.append(Color::html(values[j]));
 			} else if (nodepath.search(values[j]).is_valid()) {
 				if (values[j].begins_with("$")) {
 					String v = values[j].substr(1, values[j].length());
@@ -6992,7 +7000,6 @@ RichTextLabel::RichTextLabel(const String &p_text) {
 	vscroll->connect(SceneStringName(value_changed), callable_mp(this, &RichTextLabel::_scroll_changed));
 	vscroll->set_step(1);
 	vscroll->hide();
-
 	set_text(p_text);
 	updating.store(false);
 	validating.store(false);
